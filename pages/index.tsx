@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { inlineJsonForm } from 'next-tinacms-json'
 import { DynamicLink } from '../components/ui/DynamicLink'
 import toMarkdownString from '../utils/toMarkdownString'
 import { b64DecodeUnicode } from "../utils/base64"
+
+import { usePlugins } from "tinacms";
+import { PRPlugin } from "../open-authoring/prPlugin"
 
 import {
   Layout,
@@ -120,6 +123,27 @@ const HomePage = (props: any) => {
     },
   })
 
+  function usePRPlugin() {
+    const brancher = useMemo(() => {
+      return new PRPlugin(
+        props.baseRepoFullName,
+        props.forkFullName,
+        props.headBranch,
+        props.access_token
+      );
+    }, [
+      props.baseRepoFullName,
+      props.forkFullName,
+      props.headBranch,
+      props.access_token
+    ]);
+
+    usePlugins(brancher);
+  }
+  if (process.env.USE_CONTENT_API) {
+    usePRPlugin();
+  }
+
   const homeData = formData.data
 
   return (
@@ -210,8 +234,10 @@ export <b>WithTina</b>( <b>Component</b> );
 export default HomePage
 
 export async function unstable_getServerProps(ctx) {
+
   const props = await getJsonFormProps(ctx, 'content/pages/home.json')
   return { props }
+
 }
 
 /*
