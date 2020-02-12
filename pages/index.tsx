@@ -1,34 +1,23 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { inlineJsonForm } from 'next-tinacms-json'
 import { DynamicLink } from '../components/ui/DynamicLink'
-import toMarkdownString from '../utils/toMarkdownString'
-import { b64DecodeUnicode } from "../utils/base64"
 
-import { usePlugins } from "tinacms";
-import { PRPlugin } from "../open-authoring/prPlugin"
+import { usePlugins } from 'tinacms'
+import { PRPlugin } from '../open-authoring/prPlugin'
 
 import {
   Layout,
   Hero,
-  HeroTitle,
   Wrapper,
   Section,
   RichTextWrapper,
 } from '../components/layout'
 import { Button, Video, ArrowList } from '../components/ui'
-import { NextSeo, DefaultSeo } from 'next-seo'
-import matter from 'gray-matter'
+import { DefaultSeo } from 'next-seo'
 import { useCMS, useLocalForm } from 'tinacms'
-import { getGithubContext } from '../utils/github/getGithubContext'
 import { getJsonFormProps } from '../utils/getJsonFormProps'
 
-const {
-  createPR,
-  getContent,
-  saveContent,
-  fetchExistingPR,
-} = require('../open-authoring/github/api')
+const { saveContent } = require('../open-authoring/github/api')
 
 const HomePage = (props: any) => {
   const cms = useCMS()
@@ -64,15 +53,19 @@ const HomePage = (props: any) => {
           key: item.id,
           label: `${item.main.slice(0, 15)}...`,
         }),
+        defaultItem: () => ({
+          main: 'New Point',
+          supporting: '',
+        }),
         fields: [
           {
             label: 'Main',
-            name: 'data.main',
+            name: 'main',
             component: 'textarea',
           },
           {
             label: 'Supporting',
-            name: 'data.supporting',
+            name: 'supporting',
             component: 'textarea',
           },
         ],
@@ -92,6 +85,9 @@ const HomePage = (props: any) => {
         itemProps: item => ({
           key: item.id,
           label: `${item.step.slice(0, 15)}...`,
+        }),
+        defaultItem: () => ({
+          step: 'New Step',
         }),
         fields: [
           {
@@ -130,18 +126,18 @@ const HomePage = (props: any) => {
         props.forkFullName,
         props.headBranch,
         props.access_token
-      );
+      )
     }, [
       props.baseRepoFullName,
       props.forkFullName,
       props.headBranch,
-      props.access_token
-    ]);
+      props.access_token,
+    ])
 
-    usePlugins(brancher);
+    usePlugins(brancher)
   }
   if (process.env.USE_CONTENT_API) {
-    usePRPlugin();
+    usePRPlugin()
   }
 
   const homeData = formData.data
@@ -234,10 +230,8 @@ export <b>WithTina</b>( <b>Component</b> );
 export default HomePage
 
 export async function unstable_getServerProps(ctx) {
-
   const props = await getJsonFormProps(ctx, 'content/pages/home.json')
   return { props }
-
 }
 
 /*

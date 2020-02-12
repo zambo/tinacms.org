@@ -39,10 +39,13 @@ function TeamsPage(props) {
           key: item.id,
           label: `${item.point.slice(0, 25)}...`,
         }),
+        defaultItem: () => ({
+          point: '',
+        }),
         fields: [
           {
             label: 'Point',
-            name: 'data.point',
+            name: 'point',
             component: 'textarea',
           },
         ],
