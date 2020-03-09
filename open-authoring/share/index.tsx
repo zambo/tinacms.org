@@ -59,21 +59,6 @@ export const createShareLink = async form => {
   return response.parsedBody.shareUrl
 }
 
-export const ShareAction = ({ form }: { form: Form }) => {
-  useSharing(form)
-
-  return (
-    <ActionButton
-      onClick={async () => {
-        const shareUrl = await createShareLink(form)
-        alert(shareUrl)
-      }}
-    >
-      Share
-    </ActionButton>
-  )
-}
-
 export const SharePlugin = form => ({
   __type: 'toolbar:git',
   name: 'share',
@@ -122,9 +107,8 @@ function Share({ form, onCopied }) {
 
   const share = async () => {
     setIsPending(true)
-    const shareUrl = await createShareLink(form)
+    setShareLink(await createShareLink(form))
     setIsPending(false)
-    setShareLink(shareUrl)
   }
 
   return (

@@ -15,13 +15,24 @@ module.exports = withSvgr({
     GTM_ID: process.env.GTM_ID,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     REPO_FULL_NAME: process.env.REPO_FULL_NAME,
-    BASE_BRANCH: process.env.BASE_BRANCH
+    BASE_BRANCH: process.env.BASE_BRANCH,
   },
   exportTrailingSlash: true,
   exportPathMap: async function() {
     return {}
   },
   webpack(config) {
+    const reactDir = '/Users/jeffsee/code/tinacms.org/node_modules/react'
+    const reactDomDir = '/Users/jeffsee/code/tinacms.org/node_modules/react-dom'
+    const styledComponentsDir =
+      '/Users/jeffsee/code/tinacms.org/node_modules/styled-components'
+    const atTinacms = '/Users/jeffsee/code/tinacms/packages/@tinacms/styles'
+    config.resolve.alias['react'] = reactDir
+    config.resolve.alias['react-dom'] = reactDomDir
+    config.resolve.alias['styled'] = styledComponentsDir
+    config.resolve.alias['@tinacms/styles'] = atTinacms
+    console.log(config.resolve)
+
     config.module.rules.push({
       test: /\.md$/,
       use: 'raw-loader',
