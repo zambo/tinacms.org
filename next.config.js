@@ -1,4 +1,5 @@
 const withSvgr = require('next-svgr')
+const path = require('path')
 require('dotenv').config()
 
 const dummyMailchimpEndpoint =
@@ -22,16 +23,16 @@ module.exports = withSvgr({
     return {}
   },
   webpack(config) {
-    const reactDir = '/Users/jeffsee/code/tinacms.org/node_modules/react'
-    const reactDomDir = '/Users/jeffsee/code/tinacms.org/node_modules/react-dom'
-    const styledComponentsDir =
-      '/Users/jeffsee/code/tinacms.org/node_modules/styled-components'
-    const atTinacms = '/Users/jeffsee/code/tinacms/packages/@tinacms/styles'
-    config.resolve.alias['react'] = reactDir
-    config.resolve.alias['react-dom'] = reactDomDir
-    config.resolve.alias['styled'] = styledComponentsDir
-    config.resolve.alias['@tinacms/styles'] = atTinacms
-    console.log(config.resolve)
+    config.resolve.alias['react'] = path.resolve('./node_modules/react')
+    config.resolve.alias['react-dom'] = path.resolve('./node_modules/react-dom')
+    config.resolve.alias['styled'] = path.resolve('./node_modules/styled')
+    config.resolve.alias['@tinacms'] = path.resolve(
+      '../tinacms/packages/@tinacms'
+    )
+    config.resolve.alias['tinacms'] = path.resolve(
+      '../tinacms/packages/tinacms'
+    )
+    console.log(config.resolve.alias)
 
     config.module.rules.push({
       test: /\.md$/,
