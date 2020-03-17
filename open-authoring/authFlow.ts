@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { startPreview } from '../utils/previews'
 
 function popupWindow(url, title, window, w, h) {
   const y = window.top.outerHeight / 2 + window.top.screenY - h / 2
@@ -17,14 +18,13 @@ function popupWindow(url, title, window, w, h) {
   )
 }
 
-async function handleForkCreated(forkName) {
-  Cookies.set('fork_full_name', forkName, { sameSite: 'strict' })
-  fetch(`/api/preview`).then(() => {
-    window.location.href = window.location.pathname
-  })
+export const enterEditMode = async () => {
+  Cookies.set('head_branch', process.env.BASE_BRANCH)
+  await startPreview()
+  window.location.reload()
 }
 
-export const enterEditMode = (githubAuthenticated, forkValid) => {
+export const startAuthFlow = (githubAuthenticated, forkValid) => {
   let authTab
 
   const authState = Math.random()
@@ -36,8 +36,8 @@ export const enterEditMode = (githubAuthenticated, forkValid) => {
   localStorage.setItem('fork_full_name', '')
   if (githubAuthenticated) {
     if (fork && forkValid) {
-      handleForkCreated(fork)
-      return
+      startPreview()
+      window.location.reload()
     } else {
       authTab = popupWindow(
         `/github/fork?state=${authState}`,

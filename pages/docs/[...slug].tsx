@@ -21,11 +21,9 @@ import { TinaIcon } from '../../components/logo'
 import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
 import { getDocProps } from '../../utils/docs/getDocProps'
 import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
-import ContentNotFoundError from '../../utils/github/ContentNotFoundError'
-import { OpenAuthoringModalContainer } from '../../open-authoring/OpenAuthoringModalContainer'
-import OpenAuthoringError from '../../open-authoring/OpenAuthoringError'
+import { withErrorModal } from '../../open-authoring/withErrorModal'
 
-export default function DocTemplate(props) {
+function DocTemplate(props) {
   // Registers Tina Form
   const [data, form] = useLocalGithubMarkdownForm(
     props.markdownFile,
@@ -43,7 +41,6 @@ export default function DocTemplate(props) {
       form={form}
       path={props.markdownFile.fileRelativePath}
       editMode={props.editMode}
-      error={props.error}
     >
       <DocsLayout isEditing={props.editMode}>
         <NextSeo
@@ -94,6 +91,8 @@ export default function DocTemplate(props) {
   )
 }
 
+export default withErrorModal(DocTemplate)
+
 /*
  * DATA FETCHING ------------------------------------------------------
  */
@@ -103,18 +102,13 @@ export const getStaticProps: GetStaticProps = async function(props) {
 
   // @ts-ignore This should maybe always be a string[]?
   const slug = slugs.join('/')
-
   try {
-    return getDocProps(props, slug)
+    return await getDocProps(props, slug)
   } catch (e) {
-    if (e instanceof OpenAuthoringError) {
-      return {
-        props: {
-          error: e,
-        },
-      }
-    } else {
-      throw e
+    return {
+      props: {
+        previewError: { ...e }, //workaround since we cant return error as JSON
+      },
     }
   }
 }

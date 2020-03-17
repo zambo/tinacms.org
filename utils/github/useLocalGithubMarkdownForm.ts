@@ -27,7 +27,7 @@ const useGithubMarkdownForm = <T = any>(
     initialValues: markdownFile.data,
     fields: formOptions.fields || [],
     // save & commit the file when the "save" button is pressed
-    onSubmit(formData, form) {
+    onSubmit(formData, form) {      
       return saveContent(
         githubOptions.forkFullName,
         githubOptions.branch,
@@ -37,7 +37,6 @@ const useGithubMarkdownForm = <T = any>(
         'Update from TinaCMS'
       )
         .then(response => {
-          console.log(response)
           setCachedFormData(markdownFile.fileRelativePath, {
             sha: response.content.sha,
           })

@@ -1,32 +1,28 @@
-import { useOpenAuthoring } from "../../components/layout/OpenAuthoring"
-import { enterEditMode } from "../authFlow"
-import Cookies from "js-cookie"
-import { isGithubTokenValid, isForkValid } from "../github/api"
+import { useOpenAuthoring } from '../../components/layout/OpenAuthoring'
+import { startAuthFlow } from '../authFlow'
+import Cookies from 'js-cookie'
+import { isGithubTokenValid, isForkValid } from '../github/api'
 
 // return true if you want the modal to close
 
 export const refresh = () => {
-    fetch(`/api/reset-preview`).then( () => {
-        window.location.reload()
-    })
+  fetch(`/api/reset-preview`).then(() => {
+    window.location.reload()
+  })
 
-    return false
+  return false
 }
 
-export const enterAuthFlow = async () => {
-    const authenticated = await isGithubTokenValid()
+export const enterAuthFlow = () => {
+  //use stored value as we can do async checks and open window without it being blocked
+  const authenticated = !!window.githubAuthenticated
+  const forkValid = !!window.forkValid
 
-    const forkName = Cookies.get('fork_full_name')
-    
-    const forkValid = await isForkValid(forkName)
+  startAuthFlow(authenticated, forkValid)
 
-    fetch(`/api/reset-preview`).then( () => {
-        enterEditMode(authenticated, forkValid)
-    })
-
-    return false
+  return false
 }
 
 export const justClose = () => {
-    return true
+  return true
 }

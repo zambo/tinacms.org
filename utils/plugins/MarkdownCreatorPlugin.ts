@@ -81,7 +81,7 @@ export class MarkdownCreatorPlugin<FormShape = any, FrontmatterShape = any>
     const frontmatter = await this.frontmatter(form)
     const markdownBody = await this.body(form)
 
-    saveContent(
+    return saveContent(
       this.githubOptions.forkFullName,
       this.githubOptions.branch,
       fileRelativePath,
@@ -102,7 +102,7 @@ export class MarkdownCreatorPlugin<FormShape = any, FrontmatterShape = any>
         }
       })
       .catch(e => {
-        return { [FORM_ERROR]: new OpenAuthoringError(e.message, e.status) }
+        throw new OpenAuthoringError(e.message, e.status)
       })
   }
 }

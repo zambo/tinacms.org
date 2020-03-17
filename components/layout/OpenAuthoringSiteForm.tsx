@@ -19,7 +19,6 @@ import { useLocalStorageCache } from '../../utils/plugins/useLocalStorageCache'
 
 interface Props extends InlineFormProps {
   editMode: boolean
-  error?: OpenAuthoringError
   children: any
   path: string
 }
@@ -33,16 +32,18 @@ const useFormState = (form, subscription) => {
   return state
 }
 
-const OpenAuthoringSiteForm = ({
-  form,
-  editMode,
-  error,
-  path,
-  children,
-}: Props) => {
+const OpenAuthoringSiteForm = ({ form, editMode, path, children }: Props) => {
   const [interpretedError, setInterpretedError] = useState(null)
   const cms = useCMS()
   const formState = useFormState(form, { dirty: true, submitting: true })
+
+  const recievedOpenAuthError = error => {
+    updateUIWithError(error)
+  }
+
+  const showNeedToAuthenticateModal = async () => {
+    setInterpretedError(await interpretError(new OpenAuthoringError("Need to login", 401)))
+  }
 
   /**
    * Toolbar Plugins
@@ -50,21 +51,8 @@ const OpenAuthoringSiteForm = ({
   useEffect(() => {
     const forkName = Cookies.get('fork_full_name')
     const plugins = [
-      {
-        __type: 'toolbar:git',
-        name: 'current-fork',
-        component: () => {
-          return (
-            <FieldMeta name={'Fork'}>
-              <MetaLink target="_blank" href={`https://github.com/${forkName}`}>
-                {forkName}
-              </MetaLink>
-            </FieldMeta>
-          )
-        },
-      },
       // TODO
-      PRPlugin(process.env.REPO_FULL_NAME, forkName),
+      PRPlugin(process.env.REPO_FULL_NAME, forkName, recievedOpenAuthError),
       {
         __type: 'toolbar:form-actions',
         name: 'base-form-actions',
@@ -82,7 +70,7 @@ const OpenAuthoringSiteForm = ({
                 </ToolbarButton>
                 <SaveButton
                   primary
-                  onClick={form.submit}
+                  onClick={forkName ? form.submit : showNeedToAuthenticateModal}
                   busy={formState.submitting}
                 >
                   {formState.submitting && <LoadingDots />}
@@ -117,6 +105,22 @@ const OpenAuthoringSiteForm = ({
       },
     ] as any
 
+    if (forkName) {
+      plugins.unshift({
+        __type: 'toolbar:git',
+        name: 'current-fork',
+        component: () => {
+          return (
+            <FieldMeta name={'Fork'}>
+              <MetaLink target="_blank" href={`https://github.com/${forkName}`}>
+                {forkName}
+              </MetaLink>
+            </FieldMeta>
+          )
+        },
+      })
+    }
+
     const removePlugins = () => {
       plugins.forEach(plugin => cms.plugins.remove(plugin))
     }
@@ -139,10 +143,10 @@ const OpenAuthoringSiteForm = ({
       const errorUIDescriptor: OpenAuthoringContextualErrorUI = await interpretError(
         err
       )
-      if (errorUIDescriptor.asModal) {
+      if (errorUIDescriptor && errorUIDescriptor.asModal) {
         setInterpretedError(errorUIDescriptor)
       } else {
-        cms.alerts.error(errorUIDescriptor.message)
+        cms.alerts.error(errorUIDescriptor?.message || 'Something went wrong.')
       }
     },
     [cms, setInterpretedError]
@@ -166,14 +170,6 @@ const OpenAuthoringSiteForm = ({
     return undecorateSaveListener
   }, [form])
 
-  useEffect(() => {
-    ;(async () => {
-      if (error) {
-        updateUIWithError(error)
-      }
-    })()
-  }, [error])
-
   return (
     <InlineForm
       form={form}
@@ -181,7 +177,7 @@ const OpenAuthoringSiteForm = ({
         typeof document !== 'undefined' && editMode ? 'active' : 'inactive'
       }
     >
-      <OpenAuthoringModalContainer error={interpretedError} />
+      <OpenAuthoringModalContainer openAuthoringErrorUI={interpretedError} />
       {children}
     </InlineForm>
   )
