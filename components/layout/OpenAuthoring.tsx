@@ -38,9 +38,6 @@ export const OpenAuthoring = ({ children }) => {
       setForkValid(false)
     }
   }
-  useEffect(() => {
-    updateAuthChecks()
-  }, [])
 
   return (
     <OpenAuthoringContext.Provider
