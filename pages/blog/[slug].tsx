@@ -16,14 +16,14 @@ import getMarkdownData from '../../utils/github/getMarkdownData'
 import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
 import { fileToUrl } from '../../utils/urls'
 import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
+import ContentNotFoundError from '../../utils/github/ContentNotFoundError'
 const fg = require('fast-glob')
-import { exitEditMode, enterEditMode } from '../../open-authoring/authFlow'
+import { enterEditMode, exitEditMode } from '../../open-authoring/authFlow'
 import { useOpenAuthoring } from '../../components/layout/OpenAuthoring'
 import { Button } from '../../components/ui/Button'
 import OpenAuthoringError from '../../open-authoring/OpenAuthoringError'
-import { withErrorModal } from '../../open-authoring/withErrorModal'
 
-function BlogTemplate({
+export default function BlogTemplate({
   markdownFile,
   sourceProviderConnection,
   siteConfig,
@@ -47,6 +47,7 @@ function BlogTemplate({
       form={form}
       path={markdownFile.fileRelativePath}
       editMode={editMode}
+      error={previewError}
     >
       <Layout
         sourceProviderConnection={sourceProviderConnection}
@@ -99,8 +100,6 @@ function BlogTemplate({
   )
 }
 
-export default withErrorModal(BlogTemplate)
-
 /*
  ** DATA FETCHING --------------------------------------------------
  */
@@ -127,7 +126,7 @@ export const getStaticProps: GetStaticProps = async function({
     )
   } catch (e) {
     if (e instanceof OpenAuthoringError) {
-      previewError = { ...e } //workaround since we cant return error as JSON
+      previewError = e
     } else {
       throw e
     }
@@ -140,7 +139,7 @@ export const getStaticProps: GetStaticProps = async function({
     props: {
       sourceProviderConnection,
       editMode: !!preview,
-      previewError,
+      previewError: previewError,
       siteConfig: {
         title: siteConfig.title,
       },
@@ -287,7 +286,15 @@ const EditLink = ({ isEditMode }) => {
   return (
     <EditButton
       id="OpenAuthoringBlogEditButton"
-      onClick={isEditMode ? exitEditMode : enterEditMode}
+      onClick={
+        isEditMode
+          ? exitEditMode
+          : () =>
+              enterEditMode(
+                openAuthoring.githubAuthenticated,
+                openAuthoring.forkValid
+              )
+      }
     >
       {isEditMode ? <CloseIcon /> : <EditIcon />}
       {isEditMode ? 'Exit Edit Mode' : 'Edit This Post'}

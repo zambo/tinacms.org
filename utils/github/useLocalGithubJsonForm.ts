@@ -19,7 +19,7 @@ const useGithubJsonForm = <T = any>(
   isEditMode: boolean
 ) => {
   useGithubForm(jsonFile, githubOptions, isEditMode)
-  
+
   const [formData, form] = useLocalForm({
     id: jsonFile.fileRelativePath, // needs to be unique
     label: formOptions.label || jsonFile.fileRelativePath,
@@ -35,7 +35,7 @@ const useGithubJsonForm = <T = any>(
         JSON.stringify(formData, null, 2),
         'Update from TinaCMS'
       )
-        .then(response => {          
+        .then(response => {
           setCachedFormData(jsonFile.fileRelativePath, {
             sha: response.content.sha,
           })

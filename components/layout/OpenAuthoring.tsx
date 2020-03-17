@@ -31,12 +31,9 @@ export const OpenAuthoring = ({ children }) => {
 
   const updateAuthChecks = async () => {
     setGithubAuthenticated(await isGithubTokenValid())
-    const forkFullName = Cookies.get('fork_full_name')
-    if (forkFullName) {
-      setForkValid(await isForkValid(forkFullName))
-    } else {
-      setForkValid(false)
-    }
+
+    const forkName = Cookies.get('fork_full_name')
+    setForkValid(await isForkValid(forkName))
   }
   useEffect(() => {
     updateAuthChecks()

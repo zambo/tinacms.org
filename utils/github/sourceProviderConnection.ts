@@ -29,7 +29,7 @@ export const getGithubDataFromPreviewProps = (
   return {
     accessToken: previewData.github_access_token,
     sourceProviderConnection: {
-      forkFullName: previewData.fork_full_name || null,
+      forkFullName: previewData.fork_full_name,
       headBranch: previewData.head_branch || 'master',
       baseRepoFullName: process.env.REPO_FULL_NAME,
     },

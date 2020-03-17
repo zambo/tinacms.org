@@ -7,7 +7,7 @@ const getFiles = async (
   sourceProviderConnection: SourceProviderConnection,
   accessToken: string
 ) => {
-  if (sourceProviderConnection && accessToken) {    
+  if (sourceProviderConnection) {
     const response = await getContent(
       sourceProviderConnection.forkFullName,
       sourceProviderConnection.headBranch || 'master',

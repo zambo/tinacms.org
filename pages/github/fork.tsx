@@ -1,18 +1,20 @@
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
+import { response } from 'express'
 import { getUser, getBranch } from '../../open-authoring/github/api'
 import { AuthLayout } from '../../components/layout'
 import { Button } from '../../components/ui'
 import styled from 'styled-components'
-import { startPreview } from '../../utils/previews'
-
-async function handleForkExists(forkName: string) {
-  Cookies.set('fork_full_name', forkName, { sameSite: 'strict' })
-  await startPreview()
-  window.opener.window.location.href = window.opener.window.location.pathname
-}
 
 export default function Authorizing() {
+
+  async function handleForkCreated(forkName: string) {
+    Cookies.set('fork_full_name', forkName, { sameSite: 'strict' })
+    await fetch(`/api/preview`)   
+    
+    window.opener.window.location.href = window.opener.window.location.pathname
+  }
+
   const createFork = async () => {
     const resp = await fetch(`/api/proxy-github`, {
       method: 'POST',
@@ -28,7 +30,7 @@ export default function Authorizing() {
     const forkFullName = full_name
     if (forkFullName) {
       Cookies.set('head_branch', 'master') // default fork branch
-      await handleForkExists(full_name)
+      await handleForkCreated(full_name)
       window.close()
     } else {
       alert('Could not fork the site') //TODO - show clean error message
@@ -52,7 +54,7 @@ export default function Authorizing() {
       if (forkData.ref === 'refs/heads/' + branch) {
         // found fork\
         Cookies.set('head_branch', branch)
-        await handleForkExists(expectedFork)
+        await handleForkCreated(expectedFork)
         window.close()
         return
       }

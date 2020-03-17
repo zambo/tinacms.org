@@ -16,7 +16,6 @@ import { InlineBlocks } from 'react-tinacms-inline'
 import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
 import ContentNotFoundError from '../utils/github/ContentNotFoundError'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
-import { withErrorModal } from '../open-authoring/withErrorModal'
 
 const formOptions = {
   label: 'Teams',
@@ -51,7 +50,7 @@ const formOptions = {
   ],
 }
 
-function TeamsPage(props) {
+export default function TeamsPage(props) {
   // Adds Tina Form
   const [data, form] = useLocalGithubJsonForm(
     props.teams,
@@ -65,6 +64,7 @@ function TeamsPage(props) {
       form={form}
       path={props.teams.fileRelativePath}
       editMode={props.editMode}
+      error={props.previewError}
     >
       <TeamsLayout
         sourceProviderConnection={props.sourceProviderConnection}
@@ -109,8 +109,6 @@ function TeamsPage(props) {
   )
 }
 
-export default withErrorModal(TeamsPage)
-
 /*
  ** DATA FETCHING --------------------------------------------------
  */
@@ -134,7 +132,7 @@ export const getStaticProps: GetStaticProps = async function({
     )
   } catch (e) {
     if (e instanceof OpenAuthoringError) {
-      previewError = { ...e } //workaround since we cant return error as JSON
+      previewError = e
     } else {
       throw e
     }

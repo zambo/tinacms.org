@@ -1,43 +1,20 @@
-import OpenAuthoringError from '../../OpenAuthoringError'
-import OpenAuthoringContextualErrorUI from '../../OpenAuthoringContextualErrorUI'
-import { enterAuthFlow, refresh, justClose } from '../actions'
-import Cookies from 'js-cookie'
+import OpenAuthoringError from "../../OpenAuthoringError";
+import OpenAuthoringContextualErrorUI from "../../OpenAuthoringContextualErrorUI"
+import { enterAuthFlow, refresh, justClose } from "../actions"
 
 export default function interpretUnauthorizedError(error: OpenAuthoringError) {
-  // if authentication is not valid they need to re-authenticate
-  const fork = Cookies.get('fork_full_name')
-
-  if (!fork) {
-    // TODO - this should be abstracted somewhere
+    // if authentication is not valid they need to re-authenticate
     return new OpenAuthoringContextualErrorUI(
-      true,
-      'Authentication Required',
-      'In order to save your changes, you need to authenticate with a github account.',
-      [
-        {
-          message: 'Login',
-          action: enterAuthFlow,
+        true,
+        "401 Unauthenticated",
+        "Authentication is invalid",
+        [{ 
+            message: "Continue",
+            action: enterAuthFlow
         },
-        {
-          message: 'Cancel',
-          action: justClose,
-        },
-      ]
+        { 
+            message: "Cancel",
+            action: refresh
+        }]
     )
-  }
-  return new OpenAuthoringContextualErrorUI(
-    true,
-    '401 Unauthenticated',
-    'Authentication is invalid',
-    [
-      {
-        message: 'Continue',
-        action: enterAuthFlow,
-      },
-      {
-        message: 'Cancel',
-        action: refresh,
-      },
-    ]
-  )
 }
