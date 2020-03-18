@@ -8,8 +8,7 @@ const getJsonData = async (
   sourceProviderConnection: SourceProviderConnection,
   accessToken: string
 ) => {
-  
-  if (sourceProviderConnection && accessToken) {    
+  if (sourceProviderConnection && accessToken) {
     const response = await getDecodedData(
       sourceProviderConnection.forkFullName,
       sourceProviderConnection.headBranch || 'master',
@@ -23,7 +22,7 @@ const getJsonData = async (
       data: JSON.parse(response.content),
     }
   } else {
-    const data = await readFile(path.resolve(`${filePath}`))    
+    const data = await readFile(getPath(`${filePath}`))
     return {
       fileRelativePath: filePath,
       data: JSON.parse(data),
