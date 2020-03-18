@@ -17,6 +17,7 @@ import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
 import ContentNotFoundError from '../utils/github/ContentNotFoundError'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../open-authoring/withErrorModal'
+import path from 'path'
 
 const formOptions = {
   label: 'Teams',
@@ -126,9 +127,10 @@ export const getStaticProps: GetStaticProps = async function({
 
   let previewError: OpenAuthoringError = null
   let teamsData = {}
+  const filePath = path.resolve(process.cwd(), 'content/pages/teams.json')
   try {
     teamsData = await getJsonData(
-      'content/pages/teams.json',
+      filePath,
       sourceProviderConnection,
       accessToken
     )
