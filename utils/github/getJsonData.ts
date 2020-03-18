@@ -23,7 +23,9 @@ const getJsonData = async (
       data: JSON.parse(response.content),
     }
   } else {
-    const data = await readFile(getPath(`${filePath}`))
+    const absPath = getPath(filePath)
+    console.log(`absPath ${absPath}`)
+    const data = await readFile(absPath)
     return {
       fileRelativePath: filePath,
       data: JSON.parse(data),

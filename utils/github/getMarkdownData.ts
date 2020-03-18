@@ -29,7 +29,9 @@ const getMarkdownData = async (
       data: { frontmatter, markdownBody },
     }
   } else {
-    const doc = matter(await readFile(getPath(`${filePath}`)))
+    const absPath = getPath(filePath)
+    console.log(`absPath ${absPath}`)
+    const doc = matter(await readFile(absPath))
     return {
       fileRelativePath: filePath,
       data: {
