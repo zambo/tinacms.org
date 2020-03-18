@@ -7,7 +7,7 @@ const getFiles = async (
   sourceProviderConnection: SourceProviderConnection,
   accessToken: string
 ) => {
-  if (sourceProviderConnection && accessToken) {    
+  if (sourceProviderConnection && accessToken) {
     const response = await getContent(
       sourceProviderConnection.forkFullName,
       sourceProviderConnection.headBranch || 'master',
@@ -21,9 +21,8 @@ const getFiles = async (
   } else {
     // grab all md files
     const fg = require('fast-glob')
-    const glob = path.resolve(filePath, '*')
+    const glob = path.join(filePath, '*')
     const files = await fg(glob)
-
     return files
   }
 }

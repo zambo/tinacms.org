@@ -4,14 +4,14 @@ import path from 'path'
 import matter from 'gray-matter'
 import getDecodedData from './getDecodedData'
 import { formatExcerpt } from '..'
+import { getPath } from '../getPath'
 
 const getMarkdownData = async (
   filePath: string,
   sourceProviderConnection: SourceProviderConnection,
   accessToken: string
 ) => {
-  
-  if (sourceProviderConnection && accessToken) {    
+  if (sourceProviderConnection && accessToken) {
     const response = await getDecodedData(
       sourceProviderConnection.forkFullName,
       sourceProviderConnection.headBranch || 'master',
@@ -29,7 +29,7 @@ const getMarkdownData = async (
       data: { frontmatter, markdownBody },
     }
   } else {
-    const doc = matter(await readFile(path.resolve(`${filePath}`)))
+    const doc = matter(await readFile(getPath(`${filePath}`)))
     return {
       fileRelativePath: filePath,
       data: {
