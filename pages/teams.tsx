@@ -128,7 +128,7 @@ export const getStaticProps: GetStaticProps = async function({
   let teamsData = {}
   try {
     teamsData = await getJsonData(
-      'content/pages/teams.json',
+      preview ? 'teams.json' : 'content/pages/teams.json',
       sourceProviderConnection,
       accessToken
     )
