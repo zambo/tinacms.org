@@ -2,6 +2,7 @@ import { readFile } from '../readFile'
 import { SourceProviderConnection } from './sourceProviderConnection'
 import path from 'path'
 import getDecodedData from './getDecodedData'
+import { getPath } from '../getPath'
 
 const getJsonData = async (
   filePath: string,
