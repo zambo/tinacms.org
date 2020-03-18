@@ -111,7 +111,7 @@ export const getStaticProps: GetStaticProps = async function({
 
   try {
     const files = await getFiles(
-      path.join(process.cwd(), 'content/blog'),
+      path.resolve(process.cwd(), 'content/blog'),
       sourceProviderConnection,
       accessToken
     )
