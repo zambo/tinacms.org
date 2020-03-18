@@ -4,7 +4,6 @@ import path from 'path'
 import matter from 'gray-matter'
 import getDecodedData from './getDecodedData'
 import { formatExcerpt } from '..'
-import { getPath } from '../getPath'
 
 const getMarkdownData = async (
   filePath: string,
@@ -29,7 +28,7 @@ const getMarkdownData = async (
       data: { frontmatter, markdownBody },
     }
   } else {
-    const absPath = getPath(filePath)
+    const absPath = filePath
     console.log(`absPath ${absPath}`)
     const doc = matter(await readFile(absPath))
     return {

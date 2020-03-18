@@ -116,13 +116,8 @@ export const getStaticProps: GetStaticProps = async function({
       accessToken
     )
     const getPost = async file => {
-      const relativePath = file.split(process.cwd())[1]
       return (
-        await getMarkdownData(
-          relativePath,
-          sourceProviderConnection,
-          accessToken
-        )
+        await getMarkdownData(file, sourceProviderConnection, accessToken)
       ).data
     }
     const posts = await Promise.all(

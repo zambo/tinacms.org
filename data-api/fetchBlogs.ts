@@ -1,15 +1,14 @@
 import matter from 'gray-matter'
-import { getPath } from '../utils/getPath'
 const fg = require('fast-glob')
 var fs = require('fs')
 var path = require('path')
 
 export default async function fetchBlogs() {
-  const directory = getPath('content/blog')
+  const directory = 'content/blog'
   const files = await fg(directory + '/**/*.md')
 
   return files.map(fileName => {
-    const fullPath = getPath(path.resolve(directory, fileName))
+    const fullPath = path.resolve(directory, fileName)
 
     const slug = fullPath
       .match(new RegExp(`.+?\/blog\/(.+?)$`))[1]

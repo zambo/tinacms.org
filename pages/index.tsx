@@ -31,6 +31,7 @@ import ContentNotFoundError from '../utils/github/ContentNotFoundError'
 import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../open-authoring/withErrorModal'
+import path from 'path'
 
 const HomePage = (props: any) => {
   const [formData, form] = useLocalGithubJsonForm(
@@ -222,9 +223,10 @@ export const getStaticProps: GetStaticProps = async function({
   } = getGithubDataFromPreviewProps(previewData)
   let previewError: OpenAuthoringError = null
   let homeData = {}
+  const filePath = path.resolve(process.cwd(), 'content/pages/home.json')
   try {
     homeData = await getJsonData(
-      'content/pages/home.json',
+      filePath,
       sourceProviderConnection,
       accessToken
     )
