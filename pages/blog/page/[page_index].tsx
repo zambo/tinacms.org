@@ -18,6 +18,7 @@ import { useCMS } from 'tinacms'
 import OpenAuthoringSiteForm from '../../../components/layout/OpenAuthoringSiteForm'
 import { useForm } from 'tinacms'
 import { withErrorModal } from '../../../open-authoring/withErrorModal'
+import path from 'path'
 const Index = props => {
   const { currentPage, numPages } = props
 
@@ -110,13 +111,18 @@ export const getStaticProps: GetStaticProps = async function({
 
   try {
     const files = await getFiles(
-      'content/blog',
+      path.join(process.cwd(), 'content/blog'),
       sourceProviderConnection,
       accessToken
     )
     const getPost = async file => {
+      const relativePath = file.split(process.cwd())[1]
       return (
-        await getMarkdownData(file, sourceProviderConnection, accessToken)
+        await getMarkdownData(
+          relativePath,
+          sourceProviderConnection,
+          accessToken
+        )
       ).data
     }
     const posts = await Promise.all(
