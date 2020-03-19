@@ -20,7 +20,7 @@ import { InlineWysiwyg, InlineTextareaField } from '../../components/ui/inline'
 import { TinaIcon } from '../../components/logo'
 import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
 import { getDocProps } from '../../utils/docs/getDocProps'
-import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../../components/layout/SiteForm'
 import OpenAuthoringError from '../../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../../open-authoring/withErrrorrModal'
 
@@ -37,7 +37,7 @@ function DocTemplate(props) {
   const excerpt = props.markdownFile.data.excerpt
 
   return (
-    <OpenAuthoringSiteForm
+    <SiteForm
       form={form}
       path={props.markdownFile.fileRelativePath}
       editMode={props.editMode}
@@ -87,7 +87,7 @@ function DocTemplate(props) {
         </DocsContent>
         <Overlay open={open} onClick={() => setOpen(false)} />
       </DocsLayout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 

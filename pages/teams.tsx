@@ -11,7 +11,7 @@ import { TeamsForm } from '../components/forms'
 import { InlineTextareaField, BlockTextArea } from '../components/ui/inline'
 import getJsonData from '../utils/github/getJsonData'
 import { getGithubDataFromPreviewProps } from '../utils/github/sourceProviderConnection'
-import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../components/layout/SiteForm'
 import { InlineBlocks } from 'react-tinacms-inline'
 import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
 import ContentNotFoundError from '../utils/github/ContentNotFoundError'
@@ -60,7 +60,7 @@ function TeamsPage(props) {
   )
 
   return (
-    <OpenAuthoringSiteForm
+    <SiteForm
       form={form}
       path={props.teams.fileRelativePath}
       editMode={props.editMode}
@@ -104,7 +104,7 @@ function TeamsPage(props) {
           </Wrapper>
         </TeamsSection>
       </TeamsLayout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 

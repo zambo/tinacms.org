@@ -15,7 +15,7 @@ import { getGithubDataFromPreviewProps } from '../../utils/github/sourceProvider
 import getMarkdownData from '../../utils/github/getMarkdownData'
 import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
 import { fileToUrl } from '../../utils/urls'
-import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../../components/layout/SiteForm'
 const fg = require('fast-glob')
 import { enterEditMode, exitEditMode } from '../../open-authoring/authFlow'
 import { useOpenAuthoring } from '../../tinacms/react-open-authoring/OpenAuthoring'
@@ -48,7 +48,7 @@ function BlogTemplate({
   const excerpt = data.excerpt
 
   return (
-    <OpenAuthoringSiteForm
+    <SiteForm
       form={form}
       path={markdownFile.fileRelativePath}
       editMode={editMode}
@@ -100,7 +100,7 @@ function BlogTemplate({
           </RichTextWrapper>
         </BlogWrapper>
       </Layout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 

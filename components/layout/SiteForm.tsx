@@ -9,7 +9,7 @@ interface Props extends InlineFormProps {
   path: string
 }
 
-const OpenAuthoringSiteForm = ({ form, editMode, path, children }: Props) => {
+const SiteForm = ({ form, editMode, path, children }: Props) => {
   // Toolbar Plugins
   useOpenAuthoringToolbarPlugins(form, editMode)
 
@@ -31,4 +31,4 @@ const OpenAuthoringSiteForm = ({ form, editMode, path, children }: Props) => {
   )
 }
 
-export default OpenAuthoringSiteForm
+export default SiteForm

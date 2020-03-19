@@ -26,7 +26,7 @@ import { NextSeo } from 'next-seo'
 import getJsonData from '../utils/github/getJsonData'
 import { getGithubDataFromPreviewProps } from '../utils/github/sourceProviderConnection'
 import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
-import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../components/layout/SiteForm'
 import ContentNotFoundError from '../utils/github/ContentNotFoundError'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../open-authoring/withErrrorrModal'
@@ -46,11 +46,7 @@ function CommunityPage({
   )
 
   return (
-    <OpenAuthoringSiteForm
-      form={form}
-      path={community.fileRelativePath}
-      editMode={editMode}
-    >
+    <SiteForm form={form} path={community.fileRelativePath} editMode={editMode}>
       <Layout
         sourceProviderConnection={sourceProviderConnection}
         editMode={editMode}
@@ -154,7 +150,7 @@ function CommunityPage({
           </FormSection>
         </RichTextWrapper>
       </Layout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 

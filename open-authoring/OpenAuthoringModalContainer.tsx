@@ -84,7 +84,7 @@ export const OpenAuthoringModalContainer = (props: Props) => {
               action: runAuthWorkflow,
             },
             {
-              name: 'Cancel d',
+              name: 'Cancel',
               action: cancelAuth,
             },
           ]}

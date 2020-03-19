@@ -28,7 +28,7 @@ import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
 import getJsonData from '../utils/github/getJsonData'
 import { getGithubDataFromPreviewProps } from '../utils/github/sourceProviderConnection'
 import ContentNotFoundError from '../utils/github/ContentNotFoundError'
-import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../components/layout/SiteForm'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../open-authoring/withErrrorrModal'
 
@@ -112,7 +112,7 @@ const HomePage = (props: any) => {
   )
 
   return (
-    <OpenAuthoringSiteForm
+    <SiteForm
       form={form}
       path={props.home.fileRelativePath}
       editMode={props.editMode}
@@ -205,7 +205,7 @@ export <b>WithTina</b>( <b>Component</b> );
           </Wrapper>
         </Section>
       </Layout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 

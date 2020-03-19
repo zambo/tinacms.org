@@ -15,7 +15,7 @@ import { DynamicLink, BlogPagination } from '../../../components/ui'
 import { getGithubDataFromPreviewProps } from '../../../utils/github/sourceProviderConnection'
 import getMarkdownData from '../../../utils/github/getMarkdownData'
 import { useCMS } from 'tinacms'
-import OpenAuthoringSiteForm from '../../../components/layout/OpenAuthoringSiteForm'
+import SiteForm from '../../../components/layout/SiteForm'
 import { useForm } from 'tinacms'
 import { withErrorModal } from '../../../open-authoring/withErrrorrModal'
 const Index = props => {
@@ -31,7 +31,7 @@ const Index = props => {
   })
 
   return (
-    <OpenAuthoringSiteForm editMode={props.editMode} form={form} path={''}>
+    <SiteForm editMode={props.editMode} form={form} path={''}>
       <Layout
         sourceProviderConnection={props.sourceProviderConnection}
         editMode={props.editMode}
@@ -69,7 +69,7 @@ const Index = props => {
           <BlogPagination currentPage={currentPage} numPages={numPages} />
         </BlogWrapper>
       </Layout>
-    </OpenAuthoringSiteForm>
+    </SiteForm>
   )
 }
 
