@@ -130,7 +130,7 @@ export const getStaticProps: GetStaticProps = async function({
   let teamsData = {}
   const filePath = path.resolve(process.cwd(), 'content/pages/teams.json')
 
-  const testFile = await fs.readFile(filePath, 'utf8')
+  const testFile = await fs.readFileSync(filePath, 'utf8')
 
   try {
     teamsData = await getJsonData(
