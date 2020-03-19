@@ -131,7 +131,7 @@ export const getStaticProps: GetStaticProps = async function({
   const filePath = path.resolve(process.cwd(), 'content/pages/teams.json')
 
   const testFile = await fs.readFileSync(filePath, 'utf8')
-
+  fs.statSync(filePath, () => {}) // trigger static trace
   try {
     teamsData = await getJsonData(
       filePath,
