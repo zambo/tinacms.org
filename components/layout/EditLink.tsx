@@ -8,7 +8,7 @@ interface EditLinkProps {
   color?: 'white' | 'primary' | 'secondary' | 'seafoam' | 'variable'
   editMode: boolean
 }
-import { useOpenAuthoring } from './OpenAuthoring'
+import { useOpenAuthoring } from '../../tinacms/react-open-authoring/OpenAuthoring'
 
 export const EditLink = ({ color, editMode }: EditLinkProps) => {
   const cms = useCMS()

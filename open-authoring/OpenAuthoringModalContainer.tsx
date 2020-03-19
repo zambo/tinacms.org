@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ActionableModal } from '../components/ui'
 import { enterEditMode } from './authFlow'
-import { useOpenAuthoring } from '../components/layout/OpenAuthoring'
+import { useOpenAuthoring } from '../tinacms/react-open-authoring/OpenAuthoring'
 import OpenAuthoringErrorProps from './OpenAuthoringErrorProps'
 
 /*

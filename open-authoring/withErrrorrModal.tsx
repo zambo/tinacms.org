@@ -1,7 +1,7 @@
 import { OpenAuthoringModalContainer } from './OpenAuthoringModalContainer'
 import { useEffect, useState } from 'react'
 import getErrorUIFrom from './error-interpreter'
-import { useOpenAuthoring } from '../components/layout/OpenAuthoring'
+import { useOpenAuthoring } from '../tinacms/react-open-authoring/OpenAuthoring'
 
 declare global {
   interface Window {
