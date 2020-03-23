@@ -1,20 +1,4 @@
-# TinaCMS.org
 
-Source code for the tinacms.org website.
-
-## Development
-gfdgfd gfdg f gf gdfg 
-```
-yarn install
-yarn develop
-```
-
-### Testing Local TinaCMS Changes
-
-If you have the **tinacms** repository cloned locally you can use it when running **tinacms.org**:
-
-```
-TINA=../path/to/tinacms yarn develop
 ```
 
 You can also specify which packages you want to watch:
