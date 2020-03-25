@@ -12,7 +12,6 @@ import {
 } from '../../components/layout'
 import { InlineWysiwyg, InlineTextareaField } from '../../components/ui/inline'
 import { getGithubDataFromPreviewProps } from '../../utils/github/sourceProviderConnection'
-import getMarkdownData from '../../utils/github/getMarkdownData'
 import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
 import { fileToUrl } from '../../utils/urls'
 import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
@@ -23,6 +22,10 @@ import { Button } from '../../components/ui/Button'
 import OpenAuthoringError from '../../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../../open-authoring/withErrrorrModal'
 import Error from 'next/error'
+import { getFile as getGithubFile } from '../../tony/api-github'
+import { readFile } from '../../utils/readFile'
+import path from 'path'
+import { markdownToObject } from '../../utils/markdown_helpers'
 
 function BlogTemplate({
   markdownFile,
@@ -122,14 +125,17 @@ export const getStaticProps: GetStaticProps = async function({
     accessToken,
   } = getGithubDataFromPreviewProps(previewData)
 
+  const filepath = `content/blog/${slug}.md`
   let previewError: OpenAuthoringError = null
   let file = {}
   try {
-    file = await getMarkdownData(
-      `content/blog/${slug}.md`,
-      sourceProviderConnection,
-      accessToken
-    )
+    if (preview) {
+      file = (
+        await getGithubFile(filepath, sourceProviderConnection, accessToken)
+      ).contents
+    } else {
+      file = await readFile(path.resolve(filepath))
+    }
   } catch (e) {
     if (e instanceof OpenAuthoringError) {
       previewError = { ...e } //workaround since we cant return error as JSON
@@ -151,7 +157,10 @@ export const getStaticProps: GetStaticProps = async function({
       siteConfig: {
         title: siteConfig.title,
       },
-      markdownFile: file,
+      markdownFile: {
+        fileRelativePath: filepath,
+        data: await markdownToObject(file),
+      },
     },
   }
 }
