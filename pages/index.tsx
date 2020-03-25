@@ -31,6 +31,9 @@ import ContentNotFoundError from '../utils/github/ContentNotFoundError'
 import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
 import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
 import { withErrorModal } from '../open-authoring/withErrrorrModal'
+import { getFile as getGithubFile } from '../tony/api-github'
+import { readFile } from '../utils/readFile'
+import path from 'path'
 
 const HomePage = (props: any) => {
   const [formData, form] = useLocalGithubJsonForm(
@@ -220,13 +223,16 @@ export const getStaticProps: GetStaticProps = async function({
     accessToken,
   } = getGithubDataFromPreviewProps(previewData)
   let previewError: OpenAuthoringError = null
-  let homeData = {}
+  let homeData = null
+  let filepath = 'content/pages/home.json'
   try {
-    homeData = await getJsonData(
-      'content/pages/home.json',
-      sourceProviderConnection,
-      accessToken
-    )
+    if (preview) {
+      homeData = (
+        await getGithubFile(filepath, sourceProviderConnection, accessToken)
+      ).contents
+    } else {
+      homeData = await readFile(path.resolve(filepath))
+    }
   } catch (e) {
     if (e instanceof OpenAuthoringError) {
       previewError = { ...e } //workaround since we cant return error as JSON
@@ -237,7 +243,10 @@ export const getStaticProps: GetStaticProps = async function({
 
   return {
     props: {
-      home: homeData,
+      home: {
+        fileRelativePath: filepath,
+        data: JSON.parse(homeData),
+      },
       previewError: previewError,
       sourceProviderConnection,
       editMode: !!preview,
