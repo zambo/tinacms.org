@@ -11,7 +11,7 @@ import {
   RichTextWrapper,
 } from '../../components/layout'
 import { InlineWysiwyg, InlineTextareaField } from '../../components/ui/inline'
-import { getGithubDataFromPreviewProps } from '../../utils/github/sourceProviderConnection'
+import { getGithubDataFromPreviewProps } from '../../utils/getGithubDataFromPreviewProps'
 import { getMarkdownFile } from '../../utils/getMarkdownFile'
 import { useGithubMarkdownForm } from '../../utils/github/useGithubMarkdownForm'
 import { fileToUrl } from '../../utils/urls'

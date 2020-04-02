@@ -26,7 +26,7 @@ import {
 
 import { useGithubJsonForm } from '../utils/github/useGithubJsonForm'
 import { getJsonFile } from '../utils/getJsonFile'
-import { getGithubDataFromPreviewProps } from '../utils/github/sourceProviderConnection'
+import { getGithubDataFromPreviewProps } from '../utils/getGithubDataFromPreviewProps'
 import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
 import { GithubError } from '../utils/github/GithubError'
 
