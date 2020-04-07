@@ -8,7 +8,8 @@ import {
   ModalBody,
   ModalActions,
 } from 'tinacms'
-import { TinaReset, Button as TinaButton } from '@tinacms/styles'
+import { TinaReset } from '@tinacms/styles'
+import { AsyncButton } from './AsyncButton'
 
 const OpenAuthoringAuthModal = ({
   onUpdateAuthState,
@@ -34,7 +35,7 @@ const OpenAuthoringAuthModal = ({
           name: 'Continue to GitHub',
           action: async () => {
             await authenticate()
-            onUpdateAuthState()
+            await onUpdateAuthState()
           },
           primary: true,
         },
@@ -54,7 +55,7 @@ const OpenAuthoringAuthModal = ({
           action: async () => {
             const { full_name } = await cms.api.github.createFork()
             setForkName(full_name)
-            onUpdateAuthState()
+            await onUpdateAuthState()
           },
           primary: true,
         },
@@ -80,27 +81,6 @@ const OpenAuthoringAuthModal = ({
         </ModalPopup>
       </Modal>
     </TinaReset>
-  )
-}
-
-interface ButtonProps {
-  name: string
-  action(): Promise<void>
-  primary: boolean
-}
-const AsyncButton = ({ name, primary, action }: ButtonProps) => {
-  const [submitting, setSubmitting] = useState(false)
-
-  const onClick = useCallback(async () => {
-    setSubmitting(true)
-    await action()
-    setSubmitting(false)
-  }, [action, setSubmitting])
-
-  return (
-    <TinaButton primary={primary} onClick={onClick} busy={submitting}>
-      {name}
-    </TinaButton>
   )
 }
 

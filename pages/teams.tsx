@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BlocksControls } from '../components/ui/inline'
 import { BlockTemplate } from 'tinacms'
 import { NextSeo } from 'next-seo'
 import { GetStaticProps } from 'next'
@@ -8,13 +7,17 @@ import { GetStaticProps } from 'next'
 import { Layout, Wrapper, RichTextWrapper } from '../components/layout'
 import { ArrowList } from '../components/ui'
 import { TeamsForm } from '../components/forms'
-import { InlineTextareaField, BlockTextArea } from '../components/ui/inline'
-import getJsonData from '../utils/github/getJsonData'
+import {
+  InlineTextareaField,
+  InlineBlocks,
+  BlockTextarea,
+  BlocksControls,
+} from 'react-tinacms-inline'
+import { getJsonFile } from '../utils/getJsonFile'
 import { getGithubDataFromPreviewProps } from '../utils/github/sourceProviderConnection'
 import OpenAuthoringSiteForm from '../components/layout/OpenAuthoringSiteForm'
-import { InlineBlocks } from 'react-tinacms-inline'
-import { useLocalGithubJsonForm } from '../utils/github/useLocalGithubJsonForm'
-import OpenAuthoringError from '../open-authoring/OpenAuthoringError'
+import { useGithubJsonForm } from '../utils/github/useGithubJsonForm'
+import { GithubError } from '../utils/github/GithubError'
 
 const formOptions = {
   label: 'Teams',
@@ -51,7 +54,7 @@ const formOptions = {
 
 function TeamsPage(props) {
   // Adds Tina Form
-  const [data, form] = useLocalGithubJsonForm(
+  const [data, form] = useGithubJsonForm(
     props.teams,
     formOptions,
     props.sourceProviderConnection
@@ -121,16 +124,16 @@ export const getStaticProps: GetStaticProps = async function({
     accessToken,
   } = getGithubDataFromPreviewProps(previewData)
 
-  let previewError: OpenAuthoringError = null
+  let previewError: GithubError = null
   let teamsData = {}
   try {
-    teamsData = await getJsonData(
+    teamsData = await getJsonFile(
       'content/pages/teams.json',
       sourceProviderConnection,
       accessToken
     )
   } catch (e) {
-    if (e instanceof OpenAuthoringError) {
+    if (e instanceof GithubError) {
       previewError = { ...e } //workaround since we cant return error as JSON
     } else {
       throw e
@@ -159,7 +162,7 @@ function SupportingPoint({ data, index }) {
   return (
     <BlocksControls index={index}>
       <li key={`supporting-point-${index}`}>
-        <BlockTextArea name="point" />
+        <BlockTextarea name="point" />
       </li>
     </BlocksControls>
   )

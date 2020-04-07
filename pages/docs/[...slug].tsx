@@ -16,16 +16,16 @@ import {
   Overlay,
   DocsPagination,
 } from '../../components/ui'
-import { InlineWysiwyg, InlineTextareaField } from '../../components/ui/inline'
+import { InlineWysiwyg, InlineTextareaField } from 'react-tinacms-inline'
 import { TinaIcon } from '../../components/logo'
-import { useLocalGithubMarkdownForm } from '../../utils/github/useLocalGithubMarkdownForm'
+import { useGithubMarkdownForm } from '../../utils/github/useGithubMarkdownForm'
 import { getDocProps } from '../../utils/docs/getDocProps'
 import OpenAuthoringSiteForm from '../../components/layout/OpenAuthoringSiteForm'
-import OpenAuthoringError from '../../open-authoring/OpenAuthoringError'
+import { GithubError } from '../../utils/github/GithubError'
 
 function DocTemplate(props) {
   // Registers Tina Form
-  const [data, form] = useLocalGithubMarkdownForm(
+  const [data, form] = useGithubMarkdownForm(
     props.markdownFile,
     formOptions,
     props.sourceProviderConnection
@@ -105,7 +105,7 @@ export const getStaticProps: GetStaticProps = async function(props) {
   try {
     return getDocProps(props, slug)
   } catch (e) {
-    if (e instanceof OpenAuthoringError) {
+    if (e instanceof GithubError) {
       return {
         props: {
           previewError: { ...e }, //workaround since we cant return error as JSON
