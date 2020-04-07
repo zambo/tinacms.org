@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@tinacms/api-git": "^0.7.0-alpha.0",
-    "@tinacms/browser-storage-client": "^1.0.0-canary1",
+    "@tinacms/browser-storage-client": "^1.0.0-canary2",
     "@tinacms/git-client": "^0.6.0-alpha.0",
     "@tinacms/styles": "^0.3.0-alpha.0",
     "@types/react-instantsearch-dom": "^5.2.6",

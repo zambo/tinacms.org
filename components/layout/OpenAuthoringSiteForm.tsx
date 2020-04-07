@@ -1,6 +1,6 @@
 import { InlineForm, InlineFormProps } from 'react-tinacms-inline'
 import { useOpenAuthoringToolbarPlugins } from '../../open-authoring/toolbar-plugins/useOpenAuthoringToolbarPlugins'
-import { useLocalStorageCache } from '../../utils/plugins/browser-storage-api/useLocalStorageCache'
+import { useLocalStorageCache } from '@tinacms/browser-storage-client'
 import useOpenAuthoringErrorListener from '../../open-authoring/errors/useOpenAuthoringErrorListener'
 import AutoAuthModal from '../open-authoring/AutoAuthModal'
 

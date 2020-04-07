@@ -1438,11 +1438,12 @@
     multer "1.4.2"
     simple-git "1.126.0"
 
-"@tinacms/browser-storage-client@^1.0.0-canary1":
-  version "1.0.0-canary1"
-  resolved "https://registry.yarnpkg.com/@tinacms/browser-storage-client/-/browser-storage-client-1.0.0-canary1.tgz#cfb1b6eee31ba536e719b7220df88337a82c0f22"
-  integrity sha512-/OMIAjxAr+xvtpbe+l54Tr/SiHA4SwpAWDGwdl8MFr3/x+IBRxXObVk95M3HicNV7PhIlFgk4W6PrXMX0Q/76Q==
+"@tinacms/browser-storage-client@^1.0.0-canary2":
+  version "1.0.0-canary2"
+  resolved "https://registry.yarnpkg.com/@tinacms/browser-storage-client/-/browser-storage-client-1.0.0-canary2.tgz#635fcfb716203c2f7b52f4cd00e926abcf11eafd"
+  integrity sha512-Rg7C5S4ZXfSBR3ZfQdo+MKP4YHiQshtp3wrtCsJjUJY9f58WXaP25LXy8a8pI2nTlAg6Jn4MBPumxZ60YZO+Qw==
   dependencies:
+    lodash.get "^4.4.2"
     tinacms "^0.18.2"
 
 "@tinacms/core@^0.7.2-alpha.0":
