@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { GetStaticProps, GetStaticPaths } from 'next'
+import matter from 'gray-matter'
 import { readFile } from '../../../../utils/readFile'
 import { readMarkdownFile } from '../../../../utils/getMarkdownFile'
 import {
@@ -23,6 +24,8 @@ import { getGuideNavProps } from '../../../../utils/guide_helpers'
 import { useMemo } from 'react'
 import { useGithubMarkdownForm } from 'react-tinacms-github'
 import { OpenAuthoringSiteForm } from '../../../../components/layout/OpenAuthoringSiteForm'
+import { getContent as getGithubFiles } from 'next-tinacms-github'
+import { formatExcerpt } from '../../../../utils/blog_helpers'
 
 export default function GuideTemplate(props) {
   const [open, setOpen] = React.useState(false)
@@ -134,6 +137,19 @@ export default function GuideTemplate(props) {
   )
 }
 
+const b64DecodeUnicode = (str: string) => {
+  const atob = require('atob')
+  // Going backwards: from bytestream, to percent-encoding, to original string.
+  return decodeURIComponent(
+    atob(str)
+      .split('')
+      .map(function(c: string) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      })
+      .join('')
+  )
+}
+
 export const getStaticProps: GetStaticProps = async function(ctx) {
   const path = require('path')
   const { category, guide, step } = ctx.params
@@ -143,15 +159,48 @@ export const getStaticProps: GetStaticProps = async function(ctx) {
     category,
     guide
   )
-  const guideMetaRaw = await readFile(path.join(pathToGuide, 'meta.json'))
-  const guideMeta = JSON.parse(guideMetaRaw)
-  const markdownFile = await readMarkdownFile(
-    path.join(pathToGuide, `${step}.md`)
-  )
 
+  const githubPathToGuide = path.join('content/guides', category, guide)
+
+  let markdownFile, guideMetaRaw
+
+  if (ctx.preview) {
+    const getFromGithub = async filepath => {
+      const f = await getGithubFiles(
+        ctx.previewData.working_repo_full_name,
+        ctx.previewData.head_branch,
+        filepath,
+        ctx.previewData.github_access_token
+      )
+      return b64DecodeUnicode(f.data.content)
+    }
+
+    console.log(path.join(githubPathToGuide, `${step}.md`))
+
+    const tmpMarkdownFile = await getFromGithub(
+      path.join(githubPathToGuide, `${step}.md`)
+    )
+    const { data, content } = matter(tmpMarkdownFile)
+    markdownFile = {
+      fileRelativePath: path.join(githubPathToGuide, `${step}.md`),
+      data: {
+        frontmatter: data,
+        excerpt: await formatExcerpt(content),
+        markdownBody: content,
+      },
+    }
+    guideMetaRaw = await getFromGithub(
+      path.join(githubPathToGuide, 'meta.json')
+    )
+  } else {
+    markdownFile = await readMarkdownFile(path.join(pathToGuide, `${step}.md`))
+    guideMetaRaw = await readFile(path.join(pathToGuide, 'meta.json'))
+  }
+
+  const guideMeta = JSON.parse(guideMetaRaw)
   return {
     props: {
-      preview: true,
+      preview: ctx.preview || null,
       currentGuide: guideMeta,
       markdownFile,
       allGuides: await getGuideNavProps(),
